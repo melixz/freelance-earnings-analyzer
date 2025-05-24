@@ -1,30 +1,32 @@
-"""
-Анализатор данных о доходах фрилансеров
-"""
-
 import pandas as pd
 from typing import Dict, Any, Optional
 from pathlib import Path
-from src.document_loaders.csv_loader import FreelancerCSVLoader
+from app.document_loaders.csv_loader import FreelancerCSVLoader
 
 
 class FreelancerDataAnalyzer:
     """Анализатор данных о фрилансерах"""
 
-    def __init__(self, data_path: str = "data/freelancer_earnings_bd.csv"):
+    def __init__(
+        self,
+        data_path: str = "data/freelancer_earnings_bd.csv",
+        loader_cls=FreelancerCSVLoader,
+    ):
         """
         Инициализация анализатора
 
         Args:
             data_path: Путь к CSV файлу с данными
+            loader_cls: Класс загрузчика данных (для тестирования)
         """
         self.data_path = Path(data_path)
         self.df: Optional[pd.DataFrame] = None
+        self.loader_cls = loader_cls
         self._load_data()
 
     def _load_data(self) -> None:
         """Загружает данные из CSV файла через загрузчик"""
-        loader = FreelancerCSVLoader(str(self.data_path))
+        loader = self.loader_cls(str(self.data_path))
         self.df = loader.load()
         print(f"Загружено {len(self.df)} записей о фрилансерах")
 

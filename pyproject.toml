@@ -12,4 +12,15 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "rich>=13.0.0",
     "ruff>=0.11.11",
+    "pytest>=8.3.5",
 ]
+
+[project.scripts]
+run = "app.entrypoints:run"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.uv]
+package = true

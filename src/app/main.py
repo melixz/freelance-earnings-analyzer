@@ -1,10 +1,6 @@
-"""
-Главный файл анализатора данных фрилансеров
-"""
-
 from rich.console import Console
-from src.cli.cli import app
-from src.utils.errors import DataFileNotFound, LLMConfigError
+from app.cli.cli import app
+from app.utils.errors import DataFileNotFound, LLMConfigError
 
 
 def main():

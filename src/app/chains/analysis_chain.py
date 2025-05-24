@@ -1,18 +1,36 @@
-"""
-Цепочка анализа вопросов о данных фрилансеров с использованием LLM
-"""
-
 from typing import Dict, Any, Optional
 import json
+import numpy as np
+import pandas as pd
 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
 from ..models.data_analyzer import FreelancerDataAnalyzer
 from ..config.llm_config import get_llm
-from src.prompts.earnings_prompts import CLASSIFICATION_PROMPT, INTERPRETATION_PROMPT
-from src.prompts.predefined_questions import PREDEFINED_QUESTIONS
-from src.memory.session_memory import SessionMemory
+from ..prompts.earnings_prompts import CLASSIFICATION_PROMPT, INTERPRETATION_PROMPT
+from ..prompts.predefined_questions import PREDEFINED_QUESTIONS
+from ..memory.session_memory import SessionMemory
+
+
+class NpEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        if isinstance(obj, np.floating):
+            return float(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        if isinstance(obj, np.bool_):
+            return bool(obj)
+        if isinstance(obj, pd.Int64Dtype):
+            return int(obj)
+        if obj is pd.NA:
+            return None
+        try:
+            return super().default(obj)
+        except TypeError:
+            return str(obj)
 
 
 class FreelancerAnalysisChain:
@@ -97,7 +115,6 @@ class FreelancerAnalysisChain:
             analysis_type = self.classification_chain.invoke(
                 {"question": question}
             ).strip()
-            print(f"Определен тип анализа: {analysis_type}")
 
             analysis_results = self._get_analysis_data(analysis_type, question)
 
@@ -109,7 +126,7 @@ class FreelancerAnalysisChain:
             )
 
             formatted_results = json.dumps(
-                analysis_results, ensure_ascii=False, indent=2
+                analysis_results, ensure_ascii=False, indent=2, cls=NpEncoder
             )
 
             prompt_vars = {

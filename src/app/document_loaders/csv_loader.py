@@ -1,6 +1,6 @@
 import pandas as pd
 from pathlib import Path
-from src.utils.errors import DataFileNotFound
+from app.utils.errors import DataFileNotFound
 
 
 class FreelancerCSVLoader:

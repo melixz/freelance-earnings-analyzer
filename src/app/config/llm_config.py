@@ -1,12 +1,8 @@
-"""
-Конфигурация для LLM и других сервисов
-"""
-
 import os
 
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
-from src.utils.errors import LLMConfigError
+from ..utils.errors import LLMConfigError
 
 load_dotenv()
 
