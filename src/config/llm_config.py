@@ -6,23 +6,24 @@ import os
 
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
+from src.utils.errors import LLMConfigError
 
 load_dotenv()
 
 
 class LLMConfig:
-    """Конфигурация для языковых моделей"""
+    """Конфигурация для языковых моделей (LLM)"""
 
     def __init__(self):
-        self.openai_api_key = os.getenv("OPENAI_API_KEY")
-        self.model_name = os.getenv("OPENAI_MODEL", "gpt-4.1-nano")
-        self.temperature = float(os.getenv("OPENAI_TEMPERATURE", "0.0"))
-        self.max_tokens = int(os.getenv("OPENAI_MAX_TOKENS", "1000"))
+        self.openai_api_key: str = os.getenv("OPENAI_API_KEY")
+        self.model_name: str = os.getenv("OPENAI_MODEL", "gpt-4.1-nano")
+        self.temperature: float = float(os.getenv("OPENAI_TEMPERATURE", "0.0"))
+        self.max_tokens: int = int(os.getenv("OPENAI_MAX_TOKENS", "1000"))
 
     def validate_config(self) -> bool:
         """Проверяет корректность конфигурации"""
         if not self.openai_api_key:
-            raise ValueError(
+            raise LLMConfigError(
                 "OPENAI_API_KEY не найден в переменных окружения. "
                 "Пожалуйста, создайте .env файл и добавьте ваш ключ API"
             )
