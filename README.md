@@ -95,6 +95,7 @@ run info
 ```bash
 run demo
 ```
+![example](https://github.com/user-attachments/assets/c067bae7-54bd-4f58-8a7c-3ee7ffb578d9)
 
 ## Тестирование
 
